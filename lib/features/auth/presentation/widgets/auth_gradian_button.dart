@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 
 class AuthGradiantButton extends StatelessWidget {
   final String buttonName;
-  const AuthGradiantButton({super.key, required this.buttonName});
+  final VoidCallback onTap;
+  const AuthGradiantButton({
+    super.key,
+    required this.buttonName,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +27,7 @@ class AuthGradiantButton extends StatelessWidget {
             backgroundColor: AppPallete.transparentColor,
             shadowColor: AppPallete.transparentColor,
           ),
-          onPressed: () {},
+          onPressed: onTap,
           child: Text(
             buttonName,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(

@@ -53,7 +53,8 @@ class _LogInPageState extends State<LogInPage> {
                 isPassword: true,
               ),
               const SizedBox(height: 20),
-              const AuthGradiantButton(
+              AuthGradiantButton(
+                onTap: () {},
                 buttonName: 'Sign In',
               ),
               const SizedBox(height: 30),
