@@ -1,4 +1,6 @@
+import 'package:blog_app/core/common/widgets/loading_screen.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
+import 'package:blog_app/core/utils/show_scanbar.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/widgets/auth_gradian_button.dart';
 import 'package:blog_app/features/auth/presentation/widgets/auth_text_field.dart';
@@ -35,61 +37,73 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Sign Up.',
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 30),
-              AuthTextField(
-                hintText: 'Name',
-                controller: _nameController,
-              ),
-              const SizedBox(height: 15),
-              AuthTextField(
-                hintText: 'Email',
-                controller: _emaiController,
-              ),
-              const SizedBox(height: 15),
-              AuthTextField(
-                hintText: 'Password',
-                controller: _passwordController,
-                isPassword: true,
-              ),
-              const SizedBox(height: 20),
-              AuthGradiantButton(
-                onTap: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.read<AuthBloc>().add(
-                          AuthSignup(
-                            email: _emaiController.text.trim(),
-                            password: _passwordController.text,
-                            name: _nameController.text.trim(),
+        child: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthFailure) {
+              snackBar(context, state.failure.message);
+            }
+          },
+          builder: (context, state) {
+            if (state is AuthLoading) {
+              return const Loader();
+            }
+            return Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Sign Up.',
+                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 30),
+                  AuthTextField(
+                    hintText: 'Name',
+                    controller: _nameController,
+                  ),
+                  const SizedBox(height: 15),
+                  AuthTextField(
+                    hintText: 'Email',
+                    controller: _emaiController,
+                  ),
+                  const SizedBox(height: 15),
+                  AuthTextField(
+                    hintText: 'Password',
+                    controller: _passwordController,
+                    isPassword: true,
+                  ),
+                  const SizedBox(height: 20),
+                  AuthGradiantButton(
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthBloc>().add(
+                              AuthSignup(
+                                email: _emaiController.text.trim(),
+                                password: _passwordController.text,
+                                name: _nameController.text.trim(),
+                              ),
+                            );
+                      }
+                    },
+                    buttonName: 'Sign Up',
+                  ),
+                  const SizedBox(height: 30),
+                  RichText(
+                    text: const TextSpan(
+                        text: 'Already have an account? ',
+                        children: [
+                          TextSpan(
+                            text: 'Sign In',
+                            style: TextStyle(
+                              color: AppPallete.gradient2,
+                            ),
                           ),
-                        );
-                  }
-                },
-                buttonName: 'Sign Up',
+                        ]),
+                  )
+                ],
               ),
-              const SizedBox(height: 30),
-              RichText(
-                text: const TextSpan(
-                    text: 'Already have an account? ',
-                    children: [
-                      TextSpan(
-                        text: 'Sign In',
-                        style: TextStyle(
-                          color: AppPallete.gradient2,
-                        ),
-                      ),
-                    ]),
-              )
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
