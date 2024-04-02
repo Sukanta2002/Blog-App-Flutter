@@ -3,6 +3,8 @@ import 'package:blog_app/features/auth/data/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class AuthSupabaseDatasource {
+  Session? get currentSession;
+
   Future<UserModel> signUpWithEmailPassword({
     required String email,
     required String password,
@@ -12,6 +14,8 @@ abstract interface class AuthSupabaseDatasource {
     required String email,
     required String password,
   });
+
+  Future<UserModel?> getCurrentUser();
 }
 
 class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
@@ -55,6 +59,26 @@ class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
         throw ServerExecption('User is null');
       }
       return UserModel.fromJson(responce.user!.toJson());
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
+
+  @override
+  Session? get currentSession => supabaseClient.auth.currentSession;
+
+  @override
+  Future<UserModel?> getCurrentUser() async {
+    try {
+      if (currentSession == null) {
+        throw ServerExecption('User is Null');
+      }
+      final user = await supabaseClient
+          .from('profiles')
+          .select()
+          .eq('id', currentSession!.user.id);
+      return UserModel.fromJson(user.first)
+          .copyWith(email: currentSession!.user.email);
     } catch (e) {
       throw ServerExecption(e.toString());
     }

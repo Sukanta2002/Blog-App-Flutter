@@ -2,6 +2,7 @@ import 'package:blog_app/core/secrets/supabase_secrets.dart';
 import 'package:blog_app/features/auth/data/datasource/auth_supabase_datasource.dart';
 import 'package:blog_app/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
+import 'package:blog_app/features/auth/domain/usecase/get_user_usecase.dart';
 import 'package:blog_app/features/auth/domain/usecase/login_usecase.dart';
 import 'package:blog_app/features/auth/domain/usecase/signup_usecase.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -26,6 +27,13 @@ void _initAuth() {
     () => AuthBloc(
       signUpUsecase: serviceLocator(),
       loginUsecase: serviceLocator(),
+      currentUserUsecase: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<GetCurrentUserUsecase>(
+    () => GetCurrentUserUsecase(
+      serviceLocator(),
     ),
   );
 
