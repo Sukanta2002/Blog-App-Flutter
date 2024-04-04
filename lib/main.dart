@@ -1,3 +1,4 @@
+import 'package:blog_app/core/common/cubits/user_cubit/user_cubit.dart';
 import 'package:blog_app/core/router/app_router_config.dart';
 import 'package:blog_app/core/theme/theme.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -11,8 +12,11 @@ void main() async {
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
+        create: (_) => serviceLocator<UserCubit>(),
+      ),
+      BlocProvider(
         create: (_) => serviceLocator<AuthBloc>(),
-      )
+      ),
     ],
     child: const MyApp(),
   ));
@@ -34,10 +38,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Blog App',
-      theme: AppTheme.theme,
-      routerConfig: AppRouter.router,
+    return BlocSelector<UserCubit, UserState, bool>(
+      selector: (state) {
+        return state is UserPresent;
+      },
+      builder: (context, state) {
+        if (state) {
+          AppRouter.router.go('/home');
+        }
+        return MaterialApp.router(
+          title: 'Blog App',
+          theme: AppTheme.theme,
+          routerConfig: AppRouter.router,
+        );
+      },
     );
   }
 }
