@@ -1,5 +1,5 @@
 import 'package:blog_app/core/common/widgets/loading_screen.dart';
-import 'package:blog_app/core/router/router_constants.dart';
+import 'package:blog_app/core/router/app_router_config.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/show_scanbar.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';

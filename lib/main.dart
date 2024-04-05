@@ -2,13 +2,14 @@ import 'package:blog_app/core/common/cubits/user_cubit/user_cubit.dart';
 import 'package:blog_app/core/router/app_router_config.dart';
 import 'package:blog_app/core/theme/theme.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog_app/features/blog/presentation/pages/upload_blog_page.dart';
 import 'package:blog_app/init_dependency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initDependency();
+  await initDependency();
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
@@ -38,20 +39,28 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<UserCubit, UserState, bool>(
-      selector: (state) {
-        return state is UserPresent;
-      },
-      builder: (context, state) {
-        if (state) {
-          AppRouter.router.go('/home');
-        }
-        return MaterialApp.router(
-          title: 'Blog App',
-          theme: AppTheme.theme,
-          routerConfig: AppRouter.router,
-        );
-      },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Blog App',
+      theme: AppTheme.theme,
+      home: const UploadBlogPage(),
     );
+    //     BlocSelector<UserCubit, UserState, bool>(
+    //   selector: (state) {
+    //     return state is UserPresent;
+    //   },
+    //   builder: (context, state) {
+    //     if (state) {
+    //       AppRouter.router.go(RouterConstants.homePageRoughtPath);
+    //     }
+
+    //     return MaterialApp.router(
+    //       debugShowCheckedModeBanner: false,
+    //       title: 'Blog App',
+    //       theme: AppTheme.theme,
+    //       routerConfig: AppRouter.router,
+    //     );
+    //   },
+    // );
   }
 }

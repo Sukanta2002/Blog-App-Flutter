@@ -21,11 +21,11 @@ Future<void> initDependency() async {
   serviceLocator.registerLazySingleton(
     () => supabase.client,
   );
-
-  serviceLocator.registerLazySingleton<UserCubit>(() => UserCubit());
 }
 
 void _initAuth() {
+  serviceLocator.registerLazySingleton<UserCubit>(() => UserCubit());
+
   serviceLocator.registerLazySingleton<AuthBloc>(
     () => AuthBloc(
       signUpUsecase: serviceLocator(),

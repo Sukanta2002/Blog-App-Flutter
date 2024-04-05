@@ -1,14 +1,17 @@
-import 'package:blog_app/core/router/router_constants.dart';
 import 'package:blog_app/features/auth/presentation/pages/login_page.dart';
 import 'package:blog_app/features/auth/presentation/pages/sign_up_page.dart';
+import 'package:blog_app/features/blog/presentation/pages/blogs_page.dart';
+import 'package:blog_app/features/blog/presentation/pages/upload_blog_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+part 'router_constants.dart';
 
 abstract class AppRouter {
   static GoRouter router = GoRouter(
     routes: [
       GoRoute(
-        path: RouterConstants.homePageRoughtPath,
+        path: RouterConstants.loginPageRoughtPath,
         pageBuilder: (context, state) {
           return const MaterialPage(child: LogInPage());
         },
@@ -20,13 +23,15 @@ abstract class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/home',
+        path: RouterConstants.homePageRoughtPath,
         pageBuilder: (context, state) => const MaterialPage(
-          child: Scaffold(
-            body: Center(
-              child: Text('Home Page'),
-            ),
-          ),
+          child: BlogPage(),
+        ),
+      ),
+      GoRoute(
+        path: RouterConstants.uploadBlogPageRoughtPath,
+        pageBuilder: (context, state) => const MaterialPage(
+          child: UploadBlogPage(),
         ),
       ),
     ],

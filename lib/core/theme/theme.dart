@@ -9,12 +9,17 @@ class AppTheme {
       ),
       borderRadius: BorderRadius.circular(7));
   static final theme = ThemeData.dark().copyWith(
+    chipTheme: const ChipThemeData(
+      color: MaterialStatePropertyAll(AppPallete.backgroundColor),
+      side: BorderSide.none,
+    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppPallete.backgroundColor,
       elevation: 0,
     ),
     scaffoldBackgroundColor: AppPallete.backgroundColor,
     inputDecorationTheme: InputDecorationTheme(
+      contentPadding: const EdgeInsets.all(30),
       enabledBorder: _border(),
       focusedBorder: _border(AppPallete.gradient2),
     ),
