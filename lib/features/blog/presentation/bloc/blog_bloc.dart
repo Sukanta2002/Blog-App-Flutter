@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:blog_app/core/usecase/usecase.dart';
-import 'package:blog_app/features/blog/domain/entities/blog_entity.dart';
+import 'package:blog_app/core/entities/blog_entity.dart';
 import 'package:blog_app/features/blog/domain/usecase/get_all_blog_usecase.dart';
 import 'package:blog_app/features/blog/domain/usecase/upload_blog_usecase.dart';
 import 'package:flutter/material.dart';

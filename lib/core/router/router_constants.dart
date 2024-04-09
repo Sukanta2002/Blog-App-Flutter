@@ -5,4 +5,5 @@ class RouterConstants {
   static String signUpPageRoutePath = '/signup';
   static String homePageRoughtPath = '/home';
   static String uploadBlogPageRoughtPath = '/upload-blog';
+  static String blogReadingPage = '/blog-reading-page';
 }

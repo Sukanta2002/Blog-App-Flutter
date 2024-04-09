@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:blog_app/core/error/failure.dart';
 import 'package:blog_app/core/usecase/usecase.dart';
-import 'package:blog_app/features/blog/domain/entities/blog_entity.dart';
+import 'package:blog_app/core/entities/blog_entity.dart';
 import 'package:blog_app/features/blog/domain/repository/blog_repository.dart';
 import 'package:fpdart/fpdart.dart';
 

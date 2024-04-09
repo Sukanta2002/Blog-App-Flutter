@@ -1,4 +1,4 @@
-import 'package:blog_app/features/blog/domain/entities/blog_entity.dart';
+import 'package:blog_app/core/entities/blog_entity.dart';
 
 class BlogModel extends BlogEntity {
   BlogModel({

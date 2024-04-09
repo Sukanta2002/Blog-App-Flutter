@@ -1,5 +1,7 @@
 import 'package:blog_app/features/auth/presentation/pages/login_page.dart';
 import 'package:blog_app/features/auth/presentation/pages/sign_up_page.dart';
+import 'package:blog_app/core/entities/blog_entity.dart';
+import 'package:blog_app/features/blog/presentation/pages/blog_reading_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/blogs_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/upload_blog_page.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +36,13 @@ abstract class AppRouter {
           child: UploadBlogPage(),
         ),
       ),
+      GoRoute(
+        path: RouterConstants.blogReadingPage,
+        pageBuilder: (context, state) => MaterialPage(
+            child: BlogReadingPage(
+          blog: state.extra as BlogEntity,
+        )),
+      )
     ],
   );
 }

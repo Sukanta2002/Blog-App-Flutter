@@ -36,7 +36,7 @@ class BlogSupabaseDataSourceImpl implements BlogSupabaseDatasource {
   Future<String> uploadImage(File image, BlogModel blog) async {
     try {
       await supabaseClient.storage.from('blog_images').upload(blog.id, image);
-      return supabaseClient.storage.from('blog_image').getPublicUrl(blog.id);
+      return supabaseClient.storage.from('blog_images').getPublicUrl(blog.id);
     } catch (e) {
       throw ServerExecption(e.toString());
     }
