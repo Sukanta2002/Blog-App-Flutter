@@ -17,6 +17,14 @@ class EditingTextField extends StatelessWidget {
         hintText: hintText,
       ),
       controller: controller,
+      validator: (value) {
+        if (value == null) {
+          return "$hintText is missing";
+        } else if (value.trim() == "") {
+          return "$hintText is missing";
+        }
+        return null;
+      },
     );
   }
 }

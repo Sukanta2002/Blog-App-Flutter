@@ -7,6 +7,11 @@ import 'package:blog_app/features/auth/domain/usecase/get_user_usecase.dart';
 import 'package:blog_app/features/auth/domain/usecase/login_usecase.dart';
 import 'package:blog_app/features/auth/domain/usecase/signup_usecase.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog_app/features/blog/data/datasource/blog_supabash_datasource.dart';
+import 'package:blog_app/features/blog/data/repository/blog_repository_impl.dart';
+import 'package:blog_app/features/blog/domain/repository/blog_repository.dart';
+import 'package:blog_app/features/blog/domain/usecase/upload_blog_usecase.dart';
+import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -14,6 +19,7 @@ final serviceLocator = GetIt.instance;
 
 Future<void> initDependency() async {
   _initAuth();
+  _initBlog();
   final supabase = await Supabase.initialize(
     url: SuperbaseSecrets.supabaseUrl,
     anonKey: SuperbaseSecrets.anonKey,
@@ -24,42 +30,73 @@ Future<void> initDependency() async {
 }
 
 void _initAuth() {
-  serviceLocator.registerLazySingleton<UserCubit>(() => UserCubit());
+  serviceLocator
+    // Data source
+    ..registerFactory<AuthSupabaseDatasource>(
+      () => AuthSupabaseDatasourceImpl(
+        serviceLocator(),
+      ),
+    )
+    // repository
+    ..registerFactory<AuthRepository>(
+      () => AuthRepositoryImpl(
+        serviceLocator(),
+      ),
+    )
+    // Usecasses
+    ..registerFactory<GetCurrentUserUsecase>(
+      () => GetCurrentUserUsecase(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory<SignUpUsecase>(
+      () => SignUpUsecase(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory<LoginUsecase>(
+      () => LoginUsecase(
+        authRepository: serviceLocator(),
+      ),
+    )
+    // Auth bloc
+    ..registerLazySingleton<AuthBloc>(
+      () => AuthBloc(
+        signUpUsecase: serviceLocator(),
+        loginUsecase: serviceLocator(),
+        currentUserUsecase: serviceLocator(),
+        userCubit: serviceLocator(),
+      ),
+    )
 
-  serviceLocator.registerLazySingleton<AuthBloc>(
-    () => AuthBloc(
-      signUpUsecase: serviceLocator(),
-      loginUsecase: serviceLocator(),
-      currentUserUsecase: serviceLocator(),
-      userCubit: serviceLocator(),
-    ),
-  );
+    // user cubit
+    ..registerLazySingleton<UserCubit>(() => UserCubit());
+}
 
-  serviceLocator.registerFactory<GetCurrentUserUsecase>(
-    () => GetCurrentUserUsecase(
-      serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory<SignUpUsecase>(
-    () => SignUpUsecase(
-      serviceLocator(),
-    ),
-  );
-  serviceLocator.registerFactory<LoginUsecase>(
-    () => LoginUsecase(
-      authRepository: serviceLocator(),
-    ),
-  );
-  serviceLocator.registerFactory<AuthRepository>(
-    () => AuthRepositoryImpl(
-      serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory<AuthSupabaseDatasource>(
-    () => AuthSupabaseDatasourceImpl(
-      serviceLocator(),
-    ),
-  );
+void _initBlog() {
+  serviceLocator
+    // Data source
+    ..registerFactory<BlogSupabaseDatasource>(
+      () => BlogSupabaseDataSourceImpl(
+        supabaseClient: serviceLocator(),
+      ),
+    )
+    // repository
+    ..registerFactory<BlogRepository>(
+      () => BlogRepositoryImpl(
+        blogSupabaseDatasource: serviceLocator(),
+      ),
+    )
+    // Usecases
+    ..registerFactory<UploadBlogUsecase>(
+      () => UploadBlogUsecase(
+        blogRepository: serviceLocator(),
+      ),
+    )
+    // blog Bloc
+    ..registerLazySingleton<BlogBloc>(
+      () => BlogBloc(
+        uploadBlogUsecase: serviceLocator(),
+      ),
+    );
 }

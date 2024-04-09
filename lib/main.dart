@@ -2,7 +2,7 @@ import 'package:blog_app/core/common/cubits/user_cubit/user_cubit.dart';
 import 'package:blog_app/core/router/app_router_config.dart';
 import 'package:blog_app/core/theme/theme.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:blog_app/features/blog/presentation/pages/upload_blog_page.dart';
+import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog_app/init_dependency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +12,9 @@ void main() async {
   await initDependency();
   runApp(MultiBlocProvider(
     providers: [
+      BlocProvider(
+        create: (_) => serviceLocator<BlogBloc>(),
+      ),
       BlocProvider(
         create: (_) => serviceLocator<UserCubit>(),
       ),
@@ -39,28 +42,22 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Blog App',
-      theme: AppTheme.theme,
-      home: const UploadBlogPage(),
-    );
-    //     BlocSelector<UserCubit, UserState, bool>(
-    //   selector: (state) {
-    //     return state is UserPresent;
-    //   },
-    //   builder: (context, state) {
-    //     if (state) {
-    //       AppRouter.router.go(RouterConstants.homePageRoughtPath);
-    //     }
+    return BlocSelector<UserCubit, UserState, bool>(
+      selector: (state) {
+        return state is UserPresent;
+      },
+      builder: (context, state) {
+        if (state) {
+          AppRouter.router.go(RouterConstants.homePageRoughtPath);
+        }
 
-    //     return MaterialApp.router(
-    //       debugShowCheckedModeBanner: false,
-    //       title: 'Blog App',
-    //       theme: AppTheme.theme,
-    //       routerConfig: AppRouter.router,
-    //     );
-    //   },
-    // );
+        return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'Blog App',
+          theme: AppTheme.theme,
+          routerConfig: AppRouter.router,
+        );
+      },
+    );
   }
 }
