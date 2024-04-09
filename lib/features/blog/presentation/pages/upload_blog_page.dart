@@ -81,11 +81,10 @@ class _UploadBlogPageState extends State<UploadBlogPage> {
       body: BlocConsumer<BlogBloc, BlogState>(
         listener: (context, state) {
           if (state is BlogFailure) {
-            print(state.error);
             snackBar(context, state.error);
           }
-          if (state is BlogSucess) {
-            context.go(RouterConstants.homePageRoughtPath);
+          if (state is BlogUploadSucess) {
+            context.pushReplacement(RouterConstants.homePageRoughtPath);
           }
         },
         builder: (context, state) {

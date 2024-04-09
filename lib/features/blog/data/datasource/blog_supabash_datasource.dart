@@ -11,6 +11,8 @@ abstract interface class BlogSupabaseDatasource {
     File image,
     BlogModel blog,
   );
+
+  Future<List<BlogModel>> getAllBlogs();
 }
 
 class BlogSupabaseDataSourceImpl implements BlogSupabaseDatasource {
@@ -35,6 +37,21 @@ class BlogSupabaseDataSourceImpl implements BlogSupabaseDatasource {
     try {
       await supabaseClient.storage.from('blog_images').upload(blog.id, image);
       return supabaseClient.storage.from('blog_image').getPublicUrl(blog.id);
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
+
+  @override
+  Future<List<BlogModel>> getAllBlogs() async {
+    try {
+      final res =
+          await supabaseClient.from('blogs').select('* , profiles ("name")');
+      final blogs = res
+          .map((blog) => BlogModel.fromJson(blog)
+              .copyWith(posterName: blog['profiles']['name']))
+          .toList();
+      return blogs;
     } catch (e) {
       throw ServerExecption(e.toString());
     }

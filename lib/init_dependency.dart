@@ -10,6 +10,7 @@ import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/blog/data/datasource/blog_supabash_datasource.dart';
 import 'package:blog_app/features/blog/data/repository/blog_repository_impl.dart';
 import 'package:blog_app/features/blog/domain/repository/blog_repository.dart';
+import 'package:blog_app/features/blog/domain/usecase/get_all_blog_usecase.dart';
 import 'package:blog_app/features/blog/domain/usecase/upload_blog_usecase.dart';
 import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -93,10 +94,16 @@ void _initBlog() {
         blogRepository: serviceLocator(),
       ),
     )
+    ..registerFactory(
+      () => GetAllBlogUsecase(
+        blogRepository: serviceLocator(),
+      ),
+    )
     // blog Bloc
     ..registerLazySingleton<BlogBloc>(
       () => BlogBloc(
         uploadBlogUsecase: serviceLocator(),
+        getAllBlogUsecase: serviceLocator(),
       ),
     );
 }

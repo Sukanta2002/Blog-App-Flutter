@@ -12,4 +12,6 @@ abstract interface class BlogRepository {
     required String title,
     required File image,
   });
+
+  Future<Either<Failure, List<BlogEntity>>> getAllBlogs();
 }
