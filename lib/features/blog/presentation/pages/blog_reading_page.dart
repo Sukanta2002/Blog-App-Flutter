@@ -1,3 +1,4 @@
+import 'package:blog_app/core/utils/date_time_converter.dart';
 import 'package:blog_app/core/utils/reading_time_calc.dart';
 import 'package:blog_app/core/entities/blog_entity.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class BlogReadingPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                '${blog.updatedAt}. ${readingTimeCalc(blog.content)}',
+                '${dateTimeConverter(blog.updatedAt)}. ${readingTimeCalc(blog.content)} mins',
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 25),
@@ -40,7 +41,7 @@ class BlogReadingPage extends StatelessWidget {
                 child: ClipRRect(
                   child: Image.network(
                     blog.imageUrl,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
