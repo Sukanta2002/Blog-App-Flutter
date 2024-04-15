@@ -1,4 +1,5 @@
 import 'package:blog_app/core/common/cubits/user_cubit/user_cubit.dart';
+import 'package:blog_app/core/network/internet_connection_checker.dart';
 import 'package:blog_app/core/secrets/supabase_secrets.dart';
 import 'package:blog_app/features/auth/data/datasource/auth_supabase_datasource.dart';
 import 'package:blog_app/features/auth/data/repository/auth_repository_impl.dart';
@@ -14,6 +15,7 @@ import 'package:blog_app/features/blog/domain/usecase/get_all_blog_usecase.dart'
 import 'package:blog_app/features/blog/domain/usecase/upload_blog_usecase.dart';
 import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final serviceLocator = GetIt.instance;
@@ -32,6 +34,14 @@ Future<void> initDependency() async {
 
 void _initAuth() {
   serviceLocator
+    ..registerFactory<ConnectionChecker>(
+      () => ConnectionCheckerImpl(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => InternetConnection(),
+    )
     // Data source
     ..registerFactory<AuthSupabaseDatasource>(
       () => AuthSupabaseDatasourceImpl(
@@ -41,6 +51,7 @@ void _initAuth() {
     // repository
     ..registerFactory<AuthRepository>(
       () => AuthRepositoryImpl(
+        serviceLocator(),
         serviceLocator(),
       ),
     )

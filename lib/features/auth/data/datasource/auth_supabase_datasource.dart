@@ -70,15 +70,16 @@ class AuthSupabaseDatasourceImpl implements AuthSupabaseDatasource {
   @override
   Future<UserModel?> getCurrentUser() async {
     try {
-      if (currentSession == null) {
-        throw ServerExecption('User is Null');
+      if (currentSession != null) {
+        final userData = await supabaseClient.from('profiles').select().eq(
+              'id',
+              currentSession!.user.id,
+            );
+        return UserModel.fromJson(userData.first).copyWith(
+          email: currentSession!.user.email,
+        );
       }
-      final user = await supabaseClient
-          .from('profiles')
-          .select()
-          .eq('id', currentSession!.user.id);
-      return UserModel.fromJson(user.first)
-          .copyWith(email: currentSession!.user.email);
+      return null;
     } catch (e) {
       throw ServerExecption(e.toString());
     }
